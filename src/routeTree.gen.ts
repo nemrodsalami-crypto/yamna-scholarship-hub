@@ -18,6 +18,8 @@ import { Route as AuthRegisterRouteImport } from './routes/auth.register'
 import { Route as AuthMfaRouteImport } from './routes/auth.mfa'
 import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
+import { Route as AdminCandidaturesRouteImport } from './routes/admin.candidatures'
+import { Route as AdminCandidaturesIdRouteImport } from './routes/admin.candidatures.$id'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -64,39 +66,55 @@ const AuthForgotRoute = AuthForgotRouteImport.update({
   path: '/forgot',
   getParentRoute: () => AuthRoute,
 } as any)
+const AdminCandidaturesRoute = AdminCandidaturesRouteImport.update({
+  id: '/candidatures',
+  path: '/candidatures',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCandidaturesIdRoute = AdminCandidaturesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminCandidaturesRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/admin/candidatures': typeof AdminCandidaturesRouteWithChildren
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/mfa': typeof AuthMfaRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset': typeof AuthResetRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/candidatures/$id': typeof AdminCandidaturesIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/admin/candidatures': typeof AdminCandidaturesRouteWithChildren
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/mfa': typeof AuthMfaRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset': typeof AuthResetRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/candidatures/$id': typeof AdminCandidaturesIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/admin/candidatures': typeof AdminCandidaturesRouteWithChildren
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/mfa': typeof AuthMfaRoute
   '/auth/register': typeof AuthRegisterRoute
   '/auth/reset': typeof AuthResetRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/candidatures/$id': typeof AdminCandidaturesIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -104,33 +122,39 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/admin/candidatures'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/mfa'
     | '/auth/register'
     | '/auth/reset'
     | '/admin/'
+    | '/admin/candidatures/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
+    | '/admin/candidatures'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/mfa'
     | '/auth/register'
     | '/auth/reset'
     | '/admin'
+    | '/admin/candidatures/$id'
   id:
     | '__root__'
     | '/'
     | '/admin'
     | '/auth'
+    | '/admin/candidatures'
     | '/auth/forgot'
     | '/auth/login'
     | '/auth/mfa'
     | '/auth/register'
     | '/auth/reset'
     | '/admin/'
+    | '/admin/candidatures/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -204,14 +228,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/admin/candidatures': {
+      id: '/admin/candidatures'
+      path: '/candidatures'
+      fullPath: '/admin/candidatures'
+      preLoaderRoute: typeof AdminCandidaturesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/candidatures/$id': {
+      id: '/admin/candidatures/$id'
+      path: '/$id'
+      fullPath: '/admin/candidatures/$id'
+      preLoaderRoute: typeof AdminCandidaturesIdRouteImport
+      parentRoute: typeof AdminCandidaturesRoute
+    }
   }
 }
 
+interface AdminCandidaturesRouteChildren {
+  AdminCandidaturesIdRoute: typeof AdminCandidaturesIdRoute
+}
+
+const AdminCandidaturesRouteChildren: AdminCandidaturesRouteChildren = {
+  AdminCandidaturesIdRoute: AdminCandidaturesIdRoute,
+}
+
+const AdminCandidaturesRouteWithChildren =
+  AdminCandidaturesRoute._addFileChildren(AdminCandidaturesRouteChildren)
+
 interface AdminRouteChildren {
+  AdminCandidaturesRoute: typeof AdminCandidaturesRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminCandidaturesRoute: AdminCandidaturesRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
 
