@@ -342,7 +342,7 @@ function CandidatureDetail() {
             <CardHeader className="pb-3"><CardTitle className="text-sm">Tags</CardTitle></CardHeader>
             <CardContent>
               <div className="flex flex-wrap gap-1.5">
-                {c.tags.map((t) => (
+                {c.tags.map((t: string) => (
                   <Badge key={t} variant="secondary" className="rounded-md font-medium">{t}</Badge>
                 ))}
                 <Badge variant="outline" className="cursor-pointer rounded-md border-dashed">+ Ajouter</Badge>
