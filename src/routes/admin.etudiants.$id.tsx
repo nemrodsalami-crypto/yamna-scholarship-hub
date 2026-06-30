@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { StatutPill } from "./admin.etudiants";
 
 export const Route = createFileRoute("/admin/etudiants/$id")({
-  head: ({ loaderData }) => ({ meta: [{ title: `${loaderData?.name ?? "Étudiant"} — YAM’NA` }] }),
+  head: () => ({ meta: [{ title: "Profil étudiant — YAM’NA" }] }),
   loader: ({ params }): Etudiant => {
     const e = getEtudiant(params.id);
     if (!e) throw notFound();
