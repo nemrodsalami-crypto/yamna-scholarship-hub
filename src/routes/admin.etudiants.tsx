@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import {
   Search, Filter, Plus, Download, Upload, GraduationCap, MapPin,
-  Mail, Phone, MoreHorizontal, ArrowUpDown, LayoutGrid, List,
+  Mail, MoreHorizontal, ArrowUpDown, LayoutGrid, List,
 } from "lucide-react";
 import { PageHeader } from "@/components/yamna/page-header";
 import { Button } from "@/components/ui/button";
