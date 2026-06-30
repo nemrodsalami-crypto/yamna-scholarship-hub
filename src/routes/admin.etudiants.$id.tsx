@@ -320,7 +320,7 @@ function EtudiantDetail() {
           <Card className="p-4">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Tags</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
-              {e.tags.map((t) => (
+              {e.tags.map((t: string) => (
                 <span key={t} className="rounded-md bg-secondary px-2 py-0.5 text-[11px] font-medium text-secondary-foreground">{t}</span>
               ))}
               <button className="rounded-md border border-dashed px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground">+ Ajouter</button>
