@@ -281,5 +281,3 @@ export function StatutPill({ s }: { s: EtudiantStatut }) {
   );
 }
 
-// silence unused warnings
-void Phone;
