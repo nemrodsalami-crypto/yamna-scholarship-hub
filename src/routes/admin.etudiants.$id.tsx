@@ -390,5 +390,3 @@ function InfoLine({ icon: Icon, label, value }: { icon: typeof Mail; label: stri
     </div>
   );
 }
-
-PageHeader; // type-only no-op (kept import warm); intentionally unused
