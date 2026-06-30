@@ -20,6 +20,7 @@ import { Route as AuthLoginRouteImport } from './routes/auth.login'
 import { Route as AuthForgotRouteImport } from './routes/auth.forgot'
 import { Route as AdminEtudiantsRouteImport } from './routes/admin.etudiants'
 import { Route as AdminCandidaturesRouteImport } from './routes/admin.candidatures'
+import { Route as AdminEtudiantsIdRouteImport } from './routes/admin.etudiants.$id'
 import { Route as AdminCandidaturesIdRouteImport } from './routes/admin.candidatures.$id'
 
 const AuthRoute = AuthRouteImport.update({
@@ -77,6 +78,11 @@ const AdminCandidaturesRoute = AdminCandidaturesRouteImport.update({
   path: '/candidatures',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminEtudiantsIdRoute = AdminEtudiantsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminEtudiantsRoute,
+} as any)
 const AdminCandidaturesIdRoute = AdminCandidaturesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -88,7 +94,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/admin/candidatures': typeof AdminCandidaturesRouteWithChildren
-  '/admin/etudiants': typeof AdminEtudiantsRoute
+  '/admin/etudiants': typeof AdminEtudiantsRouteWithChildren
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/mfa': typeof AuthMfaRoute
@@ -96,12 +102,13 @@ export interface FileRoutesByFullPath {
   '/auth/reset': typeof AuthResetRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/candidatures/$id': typeof AdminCandidaturesIdRoute
+  '/admin/etudiants/$id': typeof AdminEtudiantsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/admin/candidatures': typeof AdminCandidaturesRouteWithChildren
-  '/admin/etudiants': typeof AdminEtudiantsRoute
+  '/admin/etudiants': typeof AdminEtudiantsRouteWithChildren
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/mfa': typeof AuthMfaRoute
@@ -109,6 +116,7 @@ export interface FileRoutesByTo {
   '/auth/reset': typeof AuthResetRoute
   '/admin': typeof AdminIndexRoute
   '/admin/candidatures/$id': typeof AdminCandidaturesIdRoute
+  '/admin/etudiants/$id': typeof AdminEtudiantsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -116,7 +124,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
   '/admin/candidatures': typeof AdminCandidaturesRouteWithChildren
-  '/admin/etudiants': typeof AdminEtudiantsRoute
+  '/admin/etudiants': typeof AdminEtudiantsRouteWithChildren
   '/auth/forgot': typeof AuthForgotRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/mfa': typeof AuthMfaRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/auth/reset': typeof AuthResetRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/candidatures/$id': typeof AdminCandidaturesIdRoute
+  '/admin/etudiants/$id': typeof AdminEtudiantsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -140,6 +149,7 @@ export interface FileRouteTypes {
     | '/auth/reset'
     | '/admin/'
     | '/admin/candidatures/$id'
+    | '/admin/etudiants/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/auth/reset'
     | '/admin'
     | '/admin/candidatures/$id'
+    | '/admin/etudiants/$id'
   id:
     | '__root__'
     | '/'
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/auth/reset'
     | '/admin/'
     | '/admin/candidatures/$id'
+    | '/admin/etudiants/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -254,6 +266,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCandidaturesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/etudiants/$id': {
+      id: '/admin/etudiants/$id'
+      path: '/$id'
+      fullPath: '/admin/etudiants/$id'
+      preLoaderRoute: typeof AdminEtudiantsIdRouteImport
+      parentRoute: typeof AdminEtudiantsRoute
+    }
     '/admin/candidatures/$id': {
       id: '/admin/candidatures/$id'
       path: '/$id'
@@ -275,15 +294,27 @@ const AdminCandidaturesRouteChildren: AdminCandidaturesRouteChildren = {
 const AdminCandidaturesRouteWithChildren =
   AdminCandidaturesRoute._addFileChildren(AdminCandidaturesRouteChildren)
 
+interface AdminEtudiantsRouteChildren {
+  AdminEtudiantsIdRoute: typeof AdminEtudiantsIdRoute
+}
+
+const AdminEtudiantsRouteChildren: AdminEtudiantsRouteChildren = {
+  AdminEtudiantsIdRoute: AdminEtudiantsIdRoute,
+}
+
+const AdminEtudiantsRouteWithChildren = AdminEtudiantsRoute._addFileChildren(
+  AdminEtudiantsRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminCandidaturesRoute: typeof AdminCandidaturesRouteWithChildren
-  AdminEtudiantsRoute: typeof AdminEtudiantsRoute
+  AdminEtudiantsRoute: typeof AdminEtudiantsRouteWithChildren
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCandidaturesRoute: AdminCandidaturesRouteWithChildren,
-  AdminEtudiantsRoute: AdminEtudiantsRoute,
+  AdminEtudiantsRoute: AdminEtudiantsRouteWithChildren,
   AdminIndexRoute: AdminIndexRoute,
 }
 
