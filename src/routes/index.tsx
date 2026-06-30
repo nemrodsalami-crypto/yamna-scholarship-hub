@@ -108,7 +108,7 @@ function Landing() {
               {/* Accès portails */}
               <div className="space-y-1.5">
                 <Link
-                  to="/etudiant"
+                  to="/auth/login"
                   className="flex items-center justify-between rounded-lg border px-3.5 py-2.5 text-sm text-muted-foreground transition hover:border-primary/30 hover:bg-secondary hover:text-foreground"
                 >
                   <span className="flex items-center gap-2.5">
@@ -117,7 +117,7 @@ function Landing() {
                   <ArrowRight className="h-3.5 w-3.5 opacity-40" />
                 </Link>
                 <Link
-                  to="/ecole"
+                  to="/auth/login"
                   className="flex items-center justify-between rounded-lg border px-3.5 py-2.5 text-sm text-muted-foreground transition hover:border-primary/30 hover:bg-secondary hover:text-foreground"
                 >
                   <span className="flex items-center gap-2.5">
@@ -128,7 +128,7 @@ function Landing() {
               </div>
 
               <div className="mt-4 text-center">
-                <Link to="/admin" className="text-[11px] text-muted-foreground/50 underline-offset-4 hover:text-muted-foreground hover:underline">
+                <Link to="/auth/login" className="text-[11px] text-muted-foreground/50 underline-offset-4 hover:text-muted-foreground hover:underline">
                   Accès administration
                 </Link>
               </div>
