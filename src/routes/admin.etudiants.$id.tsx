@@ -4,7 +4,7 @@ import {
   Download, MoreHorizontal, MessageSquare, FileText, Wallet, ShieldCheck,
   CheckCircle2, Clock, AlertCircle, Edit, Camera, Pencil,
 } from "lucide-react";
-import { PageHeader } from "@/components/yamna/page-header";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
