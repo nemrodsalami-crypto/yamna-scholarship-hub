@@ -1,10 +1,181 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
   ArrowRight, ShieldCheck, GraduationCap, Wallet, CheckCircle2,
   Building2, BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { YamnaLogo } from "@/components/yamna/logo";
+
+const HERO_IMAGES = [
+  "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1920&q=90&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=1920&q=90&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=1920&q=90&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1920&q=90&auto=format&fit=crop",
+];
+
+function HeroCarousel() {
+  const [current, setCurrent] = useState(0);
+  const [loaded, setLoaded] = useState<boolean[]>(HERO_IMAGES.map(() => false));
+
+  const markLoaded = (i: number) =>
+    setLoaded((prev) => { const next = [...prev]; next[i] = true; return next; });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrent((c) => (c + 1) % HERO_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  /* préchargement silencieux */
+  useEffect(() => {
+    HERO_IMAGES.forEach((src, i) => {
+      const img = new Image();
+      img.src = src;
+      img.onload = () => markLoaded(i);
+    });
+  }, []);
+
+  return (
+    <section className="relative min-h-[92vh] overflow-hidden border-b bg-gray-900">
+      {/* Fond sombre pendant le chargement — évite les blancs */}
+
+      {/* Images empilées en crossfade */}
+      {HERO_IMAGES.map((src, i) => (
+        <div
+          key={src}
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+          style={{
+            backgroundImage: loaded[i] ? `url(${src})` : undefined,
+            opacity: i === current && loaded[i] ? 1 : 0,
+          }}
+        />
+      ))}
+
+      {/* Overlay minimal : vignette douce, pas de couleur pleine */}
+      {/* Gauche : léger dégradé sombre pour lire le texte */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/55 via-black/25 to-black/10" />
+      {/* Bas : fondu doux */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10" />
+
+      {/* Contenu */}
+      <div className="relative z-10 mx-auto grid min-h-[92vh] max-w-7xl gap-8 px-4 py-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-0 lg:items-center">
+
+        {/* Texte gauche */}
+        <div className="flex flex-col justify-center text-white [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">
+          <h1 className="text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-[56px] lg:leading-[1.1]">
+            Le programme de bourses{" "}
+            <span className="text-gold drop-shadow-none [text-shadow:none]">COMILOG</span>
+            ,{" "}entièrement digitalisé.
+          </h1>
+          <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/90">
+            YAM'NA accompagne les étudiants gabonais les plus méritants
+            tout au long de leur cursus : candidature en ligne, suivi
+            académique et paiements transparents.
+          </p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Button asChild size="lg" className="bg-gold text-primary hover:bg-gold/90 shadow-lg font-semibold [text-shadow:none]">
+              <Link to="/auth/register">
+                Candidater à une bourse <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button
+              asChild size="lg" variant="outline"
+              className="border-white/50 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20 hover:text-white hover:border-white/70 [text-shadow:none]"
+            >
+              <Link to="/auth/login">J'ai déjà un compte</Link>
+            </Button>
+          </div>
+
+          {/* Stats */}
+          <dl className="mt-10 grid grid-cols-3 gap-6 border-t border-white/25 pt-8">
+            {[
+              { v: "1 240+", l: "Boursiers suivis" },
+              { v: "48", l: "Établissements partenaires" },
+              { v: "12 ans", l: "D'engagement COMILOG" },
+            ].map((s) => (
+              <div key={s.l}>
+                <dt className="text-2xl font-bold tracking-tight text-white tabular-nums">{s.v}</dt>
+                <dd className="mt-0.5 text-xs uppercase tracking-wider text-white/65">{s.l}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        {/* Card accès — glassmorphism */}
+        <div className="flex items-center lg:justify-end">
+          <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-white/10 p-7 shadow-2xl backdrop-blur-xl lg:max-w-none">
+            <Button asChild size="lg" className="h-14 w-full text-base bg-gold text-primary hover:bg-gold/90 shadow font-semibold">
+              <Link to="/auth/register">
+                Candidater à une bourse <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <p className="mt-3 text-center text-xs text-white/65">
+              Candidatures ouvertes jusqu'au{" "}
+              <strong className="text-white/90">31 octobre 2025</strong>
+            </p>
+
+            <div className="mt-4 text-center">
+              <Link
+                to="/auth/login"
+                className="text-sm text-white/65 underline-offset-4 hover:text-white hover:underline transition-colors"
+              >
+                J'ai déjà un compte
+              </Link>
+            </div>
+
+            <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-wider text-white/40">
+              <div className="h-px flex-1 bg-white/20" />
+              Accès rapides
+              <div className="h-px flex-1 bg-white/20" />
+            </div>
+
+            <div className="space-y-1.5">
+              {[
+                { icon: GraduationCap, label: "Espace Étudiant", role: "etudiant" },
+                { icon: Building2, label: "Espace Référent École", role: "ecole" },
+              ].map(({ icon: Icon, label, role }) => (
+                <a
+                  key={label}
+                  href={`/auth/login?role=${role}`}
+                  className="flex items-center justify-between rounded-xl border border-white/15 bg-white/5 px-3.5 py-2.5 text-sm text-white/75 transition hover:border-white/35 hover:bg-white/15 hover:text-white"
+                >
+                  <span className="flex items-center gap-2.5">
+                    <Icon className="h-4 w-4 shrink-0" /> {label}
+                  </span>
+                  <ArrowRight className="h-3.5 w-3.5 opacity-50" />
+                </a>
+              ))}
+            </div>
+
+            <div className="mt-4 text-center">
+              <a
+                href="/auth/login?role=admin"
+                className="text-[11px] text-white/35 underline-offset-4 hover:text-white/60 hover:underline transition-colors"
+              >
+                Accès administration
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Indicateurs de progression — automatique uniquement, pas de flèches */}
+      <div className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 items-center gap-2">
+        {HERO_IMAGES.map((_, i) => (
+          <div
+            key={i}
+            className={`h-1 rounded-full transition-all duration-500 ${
+              i === current ? "w-8 bg-gold" : "w-2 bg-white/35"
+            }`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -21,8 +192,15 @@ function Landing() {
     <div className="min-h-screen bg-background">
       {/* Top nav */}
       <header className="sticky top-0 z-40 border-b bg-background/80 backdrop-blur-md">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <YamnaLogo />
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <Link to="/" className="flex items-center">
+            <img
+              src="/logo-eramet-comilog.png"
+              alt="Eramet Comilog"
+              className="h-16 w-auto object-contain"
+            />
+          </Link>
+
           <nav className="hidden items-center gap-7 text-sm font-medium text-muted-foreground md:flex">
             <a href="#programme" className="hover:text-foreground">Programme</a>
             <a href="#parcours" className="hover:text-foreground">Parcours candidat</a>
@@ -40,102 +218,7 @@ function Landing() {
         </div>
       </header>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b">
-        <div className="absolute inset-0 -z-10 surface-grid opacity-40 [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_70%)]" />
-        <div className="absolute -top-40 left-1/2 -z-10 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.1fr_0.9fr] lg:px-8 lg:py-28">
-          <div>
-            <h1 className="text-balance text-5xl font-bold tracking-tight text-foreground sm:text-6xl">
-              Le programme de bourses{" "}
-              <span className="bg-gradient-to-br from-primary to-info bg-clip-text text-transparent">
-                COMILOG
-              </span>
-              , entièrement digitalisé.
-            </h1>
-            <p className="mt-6 max-w-xl text-lg text-muted-foreground">
-              YAM'NA accompagne les étudiants gabonais les plus méritants tout au long de leur cursus :
-              candidature en ligne, suivi académique et paiements transparents.
-            </p>
-            <div className="mt-8 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg" className="shadow-sm">
-                <Link to="/auth/register">Candidater à une bourse <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-              <Button asChild size="lg" variant="ghost" className="text-muted-foreground">
-                <Link to="/auth/login">J'ai déjà un compte</Link>
-              </Button>
-            </div>
-            <dl className="mt-10 grid grid-cols-3 gap-6 border-t pt-6">
-              {[
-                { v: "1 240+", l: "Boursiers suivis" },
-                { v: "48", l: "Établissements partenaires" },
-                { v: "12 ans", l: "D'engagement COMILOG" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <dt className="text-2xl font-bold tracking-tight text-foreground tabular-nums">{s.v}</dt>
-                  <dd className="text-xs uppercase tracking-wider text-muted-foreground">{s.l}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          {/* Card accès */}
-          <div className="relative">
-            <div className="absolute -inset-4 -z-10 rounded-3xl bg-gradient-to-br from-primary/15 via-info/10 to-gold/10 blur-2xl" />
-            <div className="rounded-2xl border bg-card p-7 shadow-lg">
-              {/* CTA principal */}
-              <Button asChild size="lg" className="h-14 w-full text-base shadow-sm">
-                <Link to="/auth/register">
-                  Candidater à une bourse <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </Button>
-              <p className="mt-3 text-center text-xs text-muted-foreground">
-                Candidatures ouvertes jusqu'au <strong className="text-foreground">31 octobre 2025</strong>
-              </p>
-
-              {/* Déjà un compte */}
-              <div className="mt-4 text-center">
-                <Link to="/auth/login" className="text-sm text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
-                  J'ai déjà un compte
-                </Link>
-              </div>
-
-              {/* Séparateur */}
-              <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-wider text-muted-foreground">
-                <div className="h-px flex-1 bg-border" /> Accès rapides <div className="h-px flex-1 bg-border" />
-              </div>
-
-              {/* Accès portails */}
-              <div className="space-y-1.5">
-                <Link
-                  to="/auth/login"
-                  className="flex items-center justify-between rounded-lg border px-3.5 py-2.5 text-sm text-muted-foreground transition hover:border-primary/30 hover:bg-secondary hover:text-foreground"
-                >
-                  <span className="flex items-center gap-2.5">
-                    <GraduationCap className="h-4 w-4 shrink-0" /> Espace Étudiant
-                  </span>
-                  <ArrowRight className="h-3.5 w-3.5 opacity-40" />
-                </Link>
-                <Link
-                  to="/auth/login"
-                  className="flex items-center justify-between rounded-lg border px-3.5 py-2.5 text-sm text-muted-foreground transition hover:border-primary/30 hover:bg-secondary hover:text-foreground"
-                >
-                  <span className="flex items-center gap-2.5">
-                    <Building2 className="h-4 w-4 shrink-0" /> Espace Référent École
-                  </span>
-                  <ArrowRight className="h-3.5 w-3.5 opacity-40" />
-                </Link>
-              </div>
-
-              <div className="mt-4 text-center">
-                <Link to="/auth/login" className="text-[11px] text-muted-foreground/50 underline-offset-4 hover:text-muted-foreground hover:underline">
-                  Accès administration
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel />
 
       {/* Programme */}
       <section id="programme" className="border-b">
@@ -224,20 +307,44 @@ function Landing() {
       {/* CTA final */}
       <section className="border-b">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary to-info px-10 py-10 text-center text-primary-foreground shadow-lg">
-            <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/8 blur-3xl" />
-            <div className="relative mx-auto max-w-xl">
-              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                Rejoignez la promotion 2025 des boursiers COMILOG
+          <div className="relative overflow-hidden rounded-2xl bg-gray-900 shadow-xl">
+            {/* Photo étudiante noire avec livres */}
+            <div
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: "url(https://images.pexels.com/photos/30575961/pexels-photo-30575961/free-photo-of-joyful-graduation-celebration-in-winneba-ghana.jpeg?auto=compress&cs=tinysrgb&w=1400&q=90)" }}
+            />
+            {/* Overlay identique au hero */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/60 via-black/35 to-black/20" />
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/15" />
+
+            {/* Contenu */}
+            <div className="relative z-10 flex flex-col items-center justify-center px-6 py-20 text-center sm:px-12 sm:py-24">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 backdrop-blur-sm mb-6">
+                <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
+                  Promotion 2025 — Candidatures ouvertes
+                </span>
+              </div>
+
+              <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl [text-shadow:0_2px_12px_rgba(0,0,0,0.5)]">
+                Rejoignez la promotion 2025<br className="hidden sm:block" /> des boursiers COMILOG
               </h2>
-              <p className="mt-2 text-sm text-primary-foreground/75">
-                Clôture des candidatures le <strong className="text-primary-foreground">31 octobre 2025</strong>.
+              <p className="mt-3 text-base text-white/80 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]">
+                Clôture des candidatures le{" "}
+                <strong className="text-white">31 octobre 2025</strong>.
               </p>
-              <div className="mt-6 flex items-center justify-center gap-4">
-                <Button asChild size="default" className="bg-white px-6 font-semibold text-primary shadow hover:bg-white/90">
-                  <Link to="/auth/register">Candidater maintenant <ArrowRight className="ml-1.5 h-3.5 w-3.5" /></Link>
-                </Button>
-                <Link to="/auth/login" className="text-sm text-primary-foreground/65 underline-offset-4 hover:text-primary-foreground hover:underline">
+
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+                <Link
+                  to="/auth/register"
+                  className="inline-flex h-12 items-center gap-2 rounded-xl bg-gold px-8 text-sm font-semibold text-primary shadow-lg transition hover:bg-gold/90"
+                >
+                  Candidater maintenant <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  to="/auth/login"
+                  className="inline-flex h-12 items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-8 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/20 hover:border-white/40"
+                >
                   J'ai déjà un compte
                 </Link>
               </div>

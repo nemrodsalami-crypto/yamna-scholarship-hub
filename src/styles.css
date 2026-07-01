@@ -81,11 +81,11 @@
 
   /* Surfaces */
   --background: oklch(0.992 0.003 250);          /* blanc cassé très propre */
-  --foreground: oklch(0.18 0.03 250);            /* bleu nuit lisible */
+  --foreground: oklch(0.30 0.19 292);            /* violet Eramet */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.03 250);
+  --card-foreground: oklch(0.30 0.19 292);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.03 250);
+  --popover-foreground: oklch(0.30 0.19 292);
 
   /* Bleu profond COMILOG — primaire */
   --primary: oklch(0.36 0.13 254);
@@ -93,13 +93,13 @@
 
   /* Gris très clair — secondaire */
   --secondary: oklch(0.965 0.006 250);
-  --secondary-foreground: oklch(0.28 0.04 254);
+  --secondary-foreground: oklch(0.30 0.19 292);
 
   --muted: oklch(0.965 0.006 250);
-  --muted-foreground: oklch(0.48 0.02 250);
+  --muted-foreground: oklch(0.48 0.10 292);
 
   --accent: oklch(0.96 0.02 254);
-  --accent-foreground: oklch(0.28 0.06 254);
+  --accent-foreground: oklch(0.30 0.19 292);
 
   /* Sémantiques */
   --destructive: oklch(0.58 0.21 27);
@@ -128,11 +128,11 @@
 
   /* Sidebar */
   --sidebar: oklch(0.985 0.004 250);
-  --sidebar-foreground: oklch(0.28 0.03 250);
+  --sidebar-foreground: oklch(0.30 0.19 292);
   --sidebar-primary: oklch(0.36 0.13 254);
   --sidebar-primary-foreground: oklch(0.99 0.005 250);
   --sidebar-accent: oklch(0.95 0.012 254);
-  --sidebar-accent-foreground: oklch(0.28 0.06 254);
+  --sidebar-accent-foreground: oklch(0.30 0.19 292);
   --sidebar-border: oklch(0.92 0.008 250);
   --sidebar-ring: oklch(0.42 0.16 254);
 }
